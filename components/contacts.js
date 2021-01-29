@@ -9,15 +9,14 @@ export default function Contacts () {
     const DATA = Constants.DATA;
     const[text, setText] = useState('');  // For search bar text
 
- 
+    // WIP : to change colour on click 
     const itemStyle = (item, index) => {
-        if(item.isAdded = true) {
-            item.isAdded = true;
+        if( DATA[index].isAdded = true) {
            return {
             flexDirection: 'row',
             justifyContent: 'space-between',
             borderWidth: 0.5,
-            padding: 20,
+            padding: 20,/*  */
             backgroundColor: 'white',
             color: 'black',
             fontSize: 16,
@@ -30,7 +29,7 @@ export default function Contacts () {
                 justifyContent: 'space-between',
                 borderWidth: 0.5,
                 padding: 20,
-                backgroundColor: 'white',
+                backgroundColor: 'green',
                 color: 'black',
                 fontSize: 16,
                 marginBottom: 5,
@@ -41,45 +40,51 @@ export default function Contacts () {
     }
 
     // Press handler for contact buttons. Adds or removes person from msgGroup
-    const pressHandler = (a) => {
+    const pressHandler = (a, index) => {
+        // const to see if added person exists in msgGroup
         const existingNumbers = msgGroup.map((addedPerson) => addedPerson.number)
-        
+        let newDATA = [...msgGroup];
+        console.log(newDATA);
+
+        // if not in group, add to group
         if(! existingNumbers.includes(a.number)){
-            setmsgGroup(msgGroup => [...msgGroup, a]);
-            // setmsgGroup(msgGroup.a.isAdded = true);
+            DATA[index].isAdded = true;
+                newDATA = [...newDATA, a];
+                setmsgGroup(newDATA);
+                console.log(newDATA);
+                itemStyle(a,index);
+            
         } 
+        // if in group, remove 
         else{
             setmsgGroup(msgGroup => {
+                DATA[index].isAdded = false;
+
+                new
+
+                itemStyle(a, index);
                 return msgGroup.filter(contact => contact != a);
                 // setmsgGroup(msgGroup.a.isAdded = false);
             })
         }
+    }
 
+    // This async function, on msg button onPress, allows texting of contacts 
      textMsgGroup = async () => {
-        const addresses = ["12042506199"]
-        /// pulls every phone number msgGRoup 
-        // const 
-        const message = `Sup Pat`
-        for(let i = 0; i <= msgGroup.length; i++){
-            const status = await SMS.sendSMSAsync(addresses, message)
+        let addresses = [];
+        let message = `Hey everyone, lets chill today.`;
+        
+        // If statement - send group SMS to everyone selected
+        if(msgGroup.length > 0) {
+            msgGroup.forEach((item) => {
+                addresses.push(item.number);
+                console.log(addresses);
+            })
+            const status = await SMS.sendSMSAsync(addresses, message);
         }
-        
-        
-        // const status1 = await SMS.sendSMSAsync(addresses, message)
-        // const status2 = await SMS.sendSMSAsync(addresses, message)
-        // const status3 = await SMS.sendSMSAsync(addresses, message)
-        // const status4 = await SMS.sendSMSAsync(addresses, message)
-        // const status5 = await SMS.sendSMSAsync(addresses, message)
-        
-        // const { result } = async () => SMS.sendSMSAsync(addresses, message)
     }
 
-//     const isAvailable = await Expo.SMS.isAvailableAsync();
-//     if (isAvailable) {
-//   const { result } = await Expo.SMS.sendSMSAsync(['123456789'], 'test1234');
-// }
-
-    }
+    
     return(
         <View>
             <View style={styles.container}>
@@ -95,7 +100,9 @@ export default function Contacts () {
             <View style={styles.buttonContainer}> 
                 <TouchableOpacity 
                 style={styles.buttons}
-                onPress={this.textMsgGroup}>
+                // textMsgGroup allow SMS texting to contacts 
+                onPress={textMsgGroup}
+                >
                     <Text style={styles.msgButton}>Message</Text> 
                 </TouchableOpacity>
 
@@ -110,10 +117,9 @@ export default function Contacts () {
 
                 </View>
             </View>
-        {/* // Contacts */}
-
+            
+            {/* // Contacts */}
             <View style={styles.container}>
-                <Text style='green'>{msgGroup.length} hello guys</Text>
                 <View style={itemStyle}>
                 <FlatList 
                     data={DATA}
@@ -123,7 +129,7 @@ export default function Contacts () {
                         <View>
                         <TouchableOpacity 
                             style={itemStyle(item, index)}
-                            onPress={() => pressHandler(item)}
+                            onPress={() => pressHandler(item, index)}
                             >
                             <Text>
                                 {item.name} #: {item.number}{'\n'}
@@ -143,9 +149,7 @@ export default function Contacts () {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 30
-
-        
+        margin: 30     
     },
     contactUnselected: {
         flexDirection: 'row',
@@ -158,17 +162,6 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         borderRadius: 25,
     },
-    // contactSelected: {
-    //     flexDirection: 'row',
-    //     justifyContent: 'space-between',
-    //     borderWidth: 0.5,
-    //     padding: 20,
-    //     backgroundColor: 'green',
-    //     color: 'black',
-    //     fontSize: 16,
-    //     marginBottom: 5,
-    //     borderRadius: 25,
-    // },
     flatListContainer: {
         margin: 30
     },
@@ -196,13 +189,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     buttons: {
-        // backgroundColor: "pink",
         width: 150,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        // borderWidth: 1,
 
     },
     msgButton: {

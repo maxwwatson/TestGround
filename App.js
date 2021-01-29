@@ -11,14 +11,6 @@ export default function App() {
   const [isAdded, setIsAdded] = useState(true)
   const [msgGroup, setmsgGroup] = useState([])
   
-  
-  const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? 'pink' : 'orange'
-  }
-
-  
-
-
   return (
     <View style={styles.container}>
       <Contacts/>
