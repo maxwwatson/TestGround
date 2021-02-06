@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'r
 import Constants from './Constants';
 import * as SMS from 'expo-sms';
 
+
 export default function Contacts () {
     const [msgGroup, setmsgGroup] = useState([]);
     const DATA = Constants.DATA;
@@ -59,9 +60,6 @@ export default function Contacts () {
         else{
             setmsgGroup(msgGroup => {
                 DATA[index].isAdded = false;
-
-                new
-
                 itemStyle(a, index);
                 return msgGroup.filter(contact => contact != a);
                 // setmsgGroup(msgGroup.a.isAdded = false);
@@ -127,15 +125,15 @@ export default function Contacts () {
                     keyExtractor={item => item.number}
                     renderItem={({ item, index }) => (
                         <View>
-                        <TouchableOpacity 
-                            style={itemStyle(item, index)}
-                            onPress={() => pressHandler(item, index)}
-                            >
-                            <Text>
-                                {item.name} #: {item.number}{'\n'}
-                                {item.tags.join(" | ")}
-                            </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={itemStyle(item, index)}
+                                onPress={() => pressHandler(item, index)}
+                                >
+                                <Text>
+                                    {item.name} #: {item.number}{'\n'}
+                                    {item.tags.join(" | ")}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     )}
                     extraData={msgGroup}
